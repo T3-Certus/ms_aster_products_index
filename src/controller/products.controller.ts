@@ -108,7 +108,7 @@ export async function getGlobalProducts(
 
     getGenericResponseHelper(globalProducts, resourceName, res);
   } catch (error) {
-    res.status(500).json(status500InternalServerError(`${error}`));
+    return res.status(500).json(status500InternalServerError(`${error}`));
   }
 }
 
@@ -158,6 +158,6 @@ export async function getIndividualProducts(
 
     getGenericResponseHelper(individualProducts, "individual_products", res);
   } catch (error) {
-    res.status(500).json(status500InternalServerError(`${error}`));
+    return res.status(500).json(status500InternalServerError(`${error}`));
   }
 }
