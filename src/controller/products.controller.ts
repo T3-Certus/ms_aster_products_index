@@ -199,6 +199,12 @@ export async function getMultipleIndividuals(
             ["product_color_name", "name"],
           ],
         },
+        {
+          model: GlobalProductModel,
+          attributes: [
+            ["product_name", "name"],
+          ],
+        },
       ],
     });
     getGenericResponseHelper(individualsProducts, "individuals_products", res);
