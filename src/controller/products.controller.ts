@@ -22,6 +22,7 @@ import {
 import { requestGetParamsValidator } from "../utils/methods";
 import { Request, Response } from "express";
 import { getGenericResponseHelper } from "../utils/methods/responseHelpers";
+import { Op } from "sequelize";
 
 const globalProductModel = GlobalProductModel;
 
@@ -157,6 +158,50 @@ export async function getIndividualProducts(
     });
 
     getGenericResponseHelper(individualProducts, "individual_products", res);
+  } catch (error) {
+    return res.status(500).json(status500InternalServerError(`${error}`));
+  }
+}
+
+export async function getMultipleIndividuals(
+  req: any,
+  res: Response<GenericServiceResponse | GenericServiceErrorResponse>
+) {
+  const { individuals } = req.body;
+
+  try {
+    const individualsProducts = await IndividualProductModel.findAll({
+      attributes: [
+        "id_individual_product",
+        "id_global_product",
+        // "id_product_size",
+        // "id_product_color",
+        "product_stock",
+        "product_price",
+        "product_sku",
+        "product_url_img",
+        "has_offer",
+        "percent_discount",
+      ],
+      where: { id_individual_product: { [Op.in]: individuals } },
+      include: [
+        {
+          model: ProductSizeModel,
+          attributes: [
+            ["id_product_size", "id"],
+            ["product_size_name", "name"],
+          ],
+        },
+        {
+          model: ProductColorModel,
+          attributes: [
+            ["id_product_color", "id"],
+            ["product_color_name", "name"],
+          ],
+        },
+      ],
+    });
+    getGenericResponseHelper(individualsProducts, "individuals_products", res);
   } catch (error) {
     return res.status(500).json(status500InternalServerError(`${error}`));
   }
