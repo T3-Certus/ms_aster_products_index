@@ -9,6 +9,6 @@ router.get("/individuals", getIndividualProducts)
 router.get("/individuals/:idGlobal", getIndividualProducts)
 router.get("/individuals/:idGlobal/:idIndividual", getIndividualProducts)
 
-router.post("individuals/multiple", getMultipleIndividuals)
+router.post("/individuals/multiple", getMultipleIndividuals)
 
 export default router
