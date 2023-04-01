@@ -3,6 +3,7 @@ name: CaproverDeploy
 env:
   CAPROVER_APP: ms-aster-products-index-production
   DOCKER_REGISTRY_URL: docker.io
+  REGISTRY_PREFIX: ssssshel/asterisks_images
 
 on:
   push:
@@ -21,11 +22,12 @@ jobs:
           CAPROVER_URL: ${{ secrets.CAPROVER_URL }}
           CAPROVER_PASSWORD: ${{ secrets.CAPROVER_PASSWORD }}
           CAPROVER_APP: ${{ env.CAPROVER_APP }}
+          REGISTRY_PREFIX: ${{ env.REGISTRY_PREFIX }}
         run: |
           echo "Building..."
           COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-7)
-          IMAGE_NAME_WITH_REGISTRY_PREFIX=$DOCKER_REGISTRY_URL/$GITHUB_REPOSITORY
-          RAW_CONTAINER_FULL_IMAGE_NAME_WITH_TAG="$IMAGE_NAME_WITH_REGISTRY_PREFIX:my-build-image-$COMMIT_HASH"
+          REPO_NAME=$(basename $GITHUB_REPOSITORY)
+          RAW_CONTAINER_FULL_IMAGE_NAME_WITH_TAG="$REGISTRY_PREFIX:$REPO_NAME-$COMMIT_HASH"
           CONTAINER_FULL_IMAGE_NAME_WITH_TAG=$(echo "$RAW_CONTAINER_FULL_IMAGE_NAME_WITH_TAG" | tr '[:upper:]' '[:lower:]')
           docker build -f ./Dockerfile --pull -t built-image-name .
           docker tag built-image-name "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
