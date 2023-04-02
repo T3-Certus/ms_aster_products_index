@@ -5,7 +5,6 @@ import { GenericServiceErrorResponse, GenericServiceResponse } from '../interfac
 import { status401Unauthorized, status403Forbidden, status500InternalServerError } from '../methods';
 
 export async function verifyAccessToken(req: any, res: Response<GenericServiceResponse | GenericServiceErrorResponse>, next: any) {
-  // console.log(req.headers)
   const accessToken: string = req.headers.authorization
   if (!accessToken) {
     return res.status(403).json(status401Unauthorized("An access token is required for authentication",))
